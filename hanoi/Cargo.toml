@@ -1,0 +1,6 @@
+[package]
+name = "hanoi"
+version = "0.1.0"
+authors = ["Mark Tozzi <mark.tozzi@gmail.com>"]
+
+[dependencies]
