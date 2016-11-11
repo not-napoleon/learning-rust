@@ -3,8 +3,14 @@ struct NamedVec {
     stack: Vec<i32>,
 }
 
-fn move_disk(mut from: NamedVec, mut to: NamedVec) {
+fn move_disk(from: &mut NamedVec, to: &mut NamedVec) {
     let disk = from.stack.pop();
+    // Deal with the case where we pop from an empty vector
+    if disk == None {
+        panic!("Attempt to move from an empty stack");
+    }
+    // Turn the Optional<i32> into a plain i32; disk here shadows the earlier usage
+    let disk = disk.unwrap();
     if to.stack.len() > 0 {
         if to.stack[to.stack.len() - 1] <= disk {
             panic!("Illegal move: disk {} from {} to {}", disk, from.name,
@@ -15,8 +21,7 @@ fn move_disk(mut from: NamedVec, mut to: NamedVec) {
     println!("Move disk {} from {} to {}", disk, from.name, to.name);
 }
 
-fn hanoi(depth: i32, mut source: NamedVec, mut dest: NamedVec,
-          swap: NamedVec) {
+fn hanoi(depth: i32, source: &mut NamedVec, dest: &mut NamedVec, swap: &mut NamedVec) {
     if depth == 1 {
         move_disk(source, dest);
     } else {
@@ -27,9 +32,9 @@ fn hanoi(depth: i32, mut source: NamedVec, mut dest: NamedVec,
 }
 
 fn main() {
-    let source = NamedVec{name: 'a', stack: vec![3, 2, 1]};
-    let dest = NamedVec{name: 'b', stack: vec![]};
-    let swap = NamedVec{name: 'c', stack: vec![]};
+    let mut source = NamedVec{name: 'a', stack: vec![3, 2, 1]};
+    let mut dest = NamedVec{name: 'b', stack: vec![]};
+    let mut swap = NamedVec{name: 'c', stack: vec![]};
 
-    hanoi(3, source, dest, swap);
+    hanoi(3, &mut source, &mut dest, &mut swap);
 }
