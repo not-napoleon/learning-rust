@@ -1,3 +1,5 @@
+use std::env;
+
 struct NamedVec {
     name: char,
     stack: Vec<i32>,
@@ -32,9 +34,18 @@ fn hanoi(depth: i32, source: &mut NamedVec, dest: &mut NamedVec, swap: &mut Name
 }
 
 fn main() {
-    let mut source = NamedVec{name: 'a', stack: vec![3, 2, 1]};
-    let mut dest = NamedVec{name: 'b', stack: vec![]};
-    let mut swap = NamedVec{name: 'c', stack: vec![]};
 
-    hanoi(3, &mut source, &mut dest, &mut swap);
+    let size_arg = env::args().nth(1);
+    let size:i32;
+    match size_arg {
+        None => size = 3,
+        Some(x) => size = x.parse().unwrap(),
+    }
+
+    // the map here saves us having to reverse the list later
+    let mut source = NamedVec{name: 'A', stack: (0..size).map(|x| size - x).collect::<Vec<i32>>()};
+    let mut dest = NamedVec{name: 'B', stack: vec![]};
+    let mut swap = NamedVec{name: 'C', stack: vec![]};
+
+    hanoi(size, &mut source, &mut dest, &mut swap);
 }
